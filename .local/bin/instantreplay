@@ -1,0 +1,47 @@
+#!/bin/sh
+
+updateicon() { \
+	echo "$1" > /tmp/recordingicon
+	pkill -RTMIN+9 "${STATUSBAR:-dwmblocks}"
+	}
+
+killrecording() {
+	recpid="$(cat /tmp/recordingpid)"
+	# kill with SIGINT, allowing finishing touches.
+	kill -INT "$recpid"
+	sleep 10
+	rm -f /tmp/recordingpid
+	updateicon ""
+	pkill -RTMIN+9 "${STATUSBAR:-dwmblocks}"
+	exit
+	}
+
+gpurecord() { \
+	gpu-screen-recorder \
+	-w "$(xrandr | awk '/ connected/ {print $1}')" \
+	-s "$(xrandr | awk  '/ connected/ {print $4}'|awk -F"+" '{print $1}')" \
+	-c mp4 \
+	-f 120 \
+	-r 150 \
+	-a "$(pactl get-default-sink).monitor" \
+	-o "$HOME/Videos/NvFBCreplay-$(date '+%y.%m.%d-%R:%S').mp4" &
+	echo $! > /tmp/recordingpid
+	updateicon "⏺️"
+	}
+
+askrecording() { \
+	choice=$(printf "gpurecord" | dmenu -i -p "6elect recording style:")
+	case "$choice" in
+		gpurecord) gpurecord;;
+	esac
+	}
+
+asktoend() { \
+	response=$(printf "No\\nYes" | dmenu -i -p "Recording still active. End recording?") &&
+	[ "$response" = "Yes" ] &&  killrecording
+	}
+case "$1" in
+	gpurecord) gpurecord;;
+	kill) killrecording;;
+	*) ([ -f /tmp/recordingpid ] && asktoend && exit) || askrecording;;
+esac
