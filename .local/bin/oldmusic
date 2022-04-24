@@ -1,0 +1,2 @@
+#!/bin/sh
+ls -1 *.*| awk -F. '{print $(NF-1)}' | sed "s/^/https:\/\/www.youtube.com\/watch\?v=/g" | xargs -L1 yt-dlp -x -i -c --embed-metadata --add-chapters --audio-format mp3 --prefer-ffmpeg --embed-thumbnail -o './%(title)s.%(uploader)s.%(id)s.%(ext)s'
