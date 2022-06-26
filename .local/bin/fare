@@ -1,7 +1,4 @@
 #!/bin/bash
+xinput | grep -i "Razer Razer Viper Ultimate Dongle.*pointer" | awk '{print $8}' | sed s/id=// | xargs -I OXOX xinput --set-prop OXOX 'libinput Accel Profile Enabled' 0, 1
 
-#xinput --set-prop 'pointer:''Razer Razer Viper Ultimate Dongle' 'libinput Accel Profile Enabled' 0, 1
-xinput --set-prop 12 'libinput Accel Profile Enabled' 0, 1
-
-#xinput --set-prop 'pointer:''Razer Razer Viper Ultimate Dongle' 'libinput Accel Speed' -0.1
-xinput --set-prop 12 'libinput Accel Speed' -0.9
+xinput | grep -i "Razer Razer Viper Ultimate Dongle.*pointer" | awk '{print $8}' | sed s/id=// | xargs -I OXOX xinput --set-prop OXOX 'libinput Accel Speed' -0.8
