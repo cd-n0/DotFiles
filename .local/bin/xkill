@@ -1,0 +1,1 @@
+kill $(xprop |grep 'WM_PID' | rev | cut -d' ' -f 1 | rev)
