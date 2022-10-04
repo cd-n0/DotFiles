@@ -1,0 +1,9 @@
+#!/bin/sh
+while true
+   do
+	   pil="$(find /sys/class/power_supply/BAT?*)"
+	   doluluk="$(cat "$pil/capacity" 2>&1)"
+	   durum="$(cat /sys/class/power_supply/BAT?*/status)"
+	   [ "$doluluk" -le 25 ]  && [ "$durum" = "Discharging" ] && notify-send "Battery Low"
+	   sleep 5
+   done
