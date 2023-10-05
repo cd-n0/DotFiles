@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Prompt the user for the template
+selected_template=$(ls $HOME/Documents/latex/latex_templates | dmenu -l 10)
+
+# Prompt the user for the new folder name
+read -p "Enter the new folder name: " new_folder_name
+
+# Prompt the user for the new template name
+read -p "Enter the new template name (without extension): " new_template_name
+
+# Check if the new folder name already exists
+if [ -d "$new_folder_name" ]; then
+  echo "Error: The folder '$new_folder_name' already exists."
+  exit 1
+fi
+
+# Copy the template folder to the current directory with the new folder name
+cp -r $HOME/Documents/latex/latex_templates/"$selected_template" "$new_folder_name"
+
+# Change the name of the LaTeX template file to the new name
+mv "$new_folder_name/template.tex" "$new_folder_name/$new_template_name.tex"
+
+# Change the name of the PDF output file to match the new name
+mv "$new_folder_name/template.pdf" "$new_folder_name/$new_template_name.pdf"
+
+# Inform the user about the successful deployment
+echo "Template deployed successfully as '$new_folder_name' with template name '$new_template_name'."
+
+# Optionally, you can open the newly created folder in your default file explorer
+# Uncomment the line below if you want to open the folder automatically
+# xdg-open "$new_folder_name"
