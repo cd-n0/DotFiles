@@ -10,10 +10,7 @@ read -p "Enter the new folder name: " new_folder_name
 read -p "Enter the new template name (without extension): " new_template_name
 
 # Check if the new folder name already exists
-if [ -d "$new_folder_name" ]; then
-  echo "Error: The folder '$new_folder_name' already exists."
-  exit 1
-fi
+[ -d "$new_folder_name" ] && echo "Error: The folder '$new_folder_name' already exists." && exit 1
 
 # Copy the template folder to the current directory with the new folder name
 cp -r $HOME/Documents/latex/latex_templates/"$selected_template" "$new_folder_name"
